@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikimedia Pages Proposed for Translation - Text Actions</title>
+    <!-- Import Codex CSS -->
+    <link rel="stylesheet" href="../shared/node_modules/@wikimedia/codex/dist/codex.style.css">
+    <!-- Import Codex Table CSS -->
+    <link rel="stylesheet" href="../shared/node_modules/@wikimedia/codex/dist/modules/CdxTable.css">
+    <!-- Import Codex Button CSS -->
+    <link rel="stylesheet" href="../shared/node_modules/@wikimedia/codex/dist/modules/CdxButton.css">
+    <!-- Import Codex Icon CSS -->
+    <link rel="stylesheet" href="../shared/node_modules/@wikimedia/codex/dist/modules/Icon.css">
+    <!-- Import Codex Checkbox CSS -->
+    <link rel="stylesheet" href="../shared/node_modules/@wikimedia/codex/dist/modules/CdxCheckbox.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+        .page-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .page-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid #a2a9b1;
+        }
+        .page-title {
+            color: #202122;
+            margin: 0;
+            font-size: 2.25rem;
+            font-weight: normal;
+            line-height: 1.25;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 0.5rem;
+            font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+        }
+        .treatment-info {
+            background: #eaf3ff;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #a2a9b1;
+            font-size: 0.9rem;
+            color: #54595d;
+        }
+        .back-link {
+            color: #36c;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        /* Codex table header styles */
+        .cdx-table__header {
+            display: none;
+            background: #eaf3ff;
+            border-bottom: 1px solid #a2a9b1;
+            padding: 16px 20px;
+        }
+        .cdx-table__header.cdx-table__header--visible {
+            display: block;
+        }
+        .cdx-table__header__content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+        .cdx-table__header__caption {
+            flex: 0 0 auto;
+            font-weight: 500;
+            color: #202122;
+            font-size: 14px;
+        }
+        .cdx-table__header__actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .cdx-table__header__actions .cdx-button {
+            min-height: 32px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cdx-table__header__actions .cdx-button .cdx-icon {
+            width: 16px;
+            height: 16px;
+        }
+        .cdx-table__header__actions .cdx-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .page-title-link {
+            color: var(--color-progressive, #36c);
+            text-decoration: none;
+        }
+        .page-title-link:hover {
+            color: var(--color-progressive--hover, #3056a9);
+            text-decoration: underline;
+        }
+        /* Updated styles for text-based actions */
+        .table-row-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .table-row-actions .cdx-button {
+            min-height: 32px;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Codex Icons */
+        .cdx-icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+        .cdx-icon--check {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M7 14.17 2.83 10l-1.41 1.41L7 17 19 5l-1.41-1.42z'/></svg>");
+        }
+        .cdx-icon--alert {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M11.53 2.3A1.85 1.85 0 0010 1.21 1.85 1.85 0 008.48 2.3L.36 16.36C-.48 17.81.21 19 1.88 19h16.24c1.67 0 2.36-1.19 1.52-2.64zM11 16H9v-2h2zm0-4H9V6h2z'/></svg>");
+        }
+        .cdx-icon--trash {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path fill='%23BF3C2C' d='M17 2h-3.5l-1-1h-5l-1 1H3v2h14zM4 17a2 2 0 002 2h8a2 2 0 002-2V5H4z'/></svg>");
+        }
+        .cdx-icon--restore {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M1.22 0 0 1.22l4 4V17a2 2 0 002 2h8a2 2 0 002-1.8l2.8 2.8 1.2-1.22zM17 4V2h-3.5l-1-1h-5l-1 1h-.84l2 2zM8.66 5H16v7.34z'/></svg>");
+        }
+        .cdx-icon--clear {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M7 14.17 2.83 10l-1.41 1.41L7 17 19 5l-1.41-1.42z'/></svg>");
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="page-header">
+            <h1 class="page-title">Wikimedia Pages Proposed for Translation</h1>
+        </div>
+        
+        <div class="treatment-info">
+            <a href="../" class="back-link">← Back to Showcase</a> | 
+            Treatment 2: This version uses text-based actions instead of icon-only buttons for better accessibility and context.
+        </div>
+        
+        <div class="cdx-table">
+            <div class="cdx-table__header" id="bulkActionsHeader">
+                <div class="cdx-table__header__content">
+                    <div class="cdx-table__header__caption">
+                        <strong><span id="selectedCount">0</span> pages selected</strong>
+                    </div>
+                    <div class="cdx-table__header__actions">
+                        <button class="cdx-button" 
+                                id="bulkMarkTranslation" onclick="bulkMarkForTranslation()" 
+                                title="Mark selected pages for translation">
+                            Mark for translation
+                        </button>
+                        <button class="cdx-button" 
+                                id="bulkDiscourage" onclick="bulkDiscourage()" 
+                                title="Discourage selected pages">
+                            Discourage
+                        </button>
+                        <button class="cdx-button" 
+                                id="bulkRemove" onclick="bulkRemoveFromTranslation()" 
+                                title="Remove selected pages from translation">
+                            Remove from translation
+                        </button>
+                        <button class="cdx-button" 
+                                id="clearSelection" onclick="clearSelection()" 
+                                title="Clear selection">
+                            Clear selection
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="cdx-table__table-wrapper">
+                <table class="cdx-table__table" id="translationTable">
+                    <caption>Pages proposed for translation on Meta-Wiki</caption>
+                    <thead>
+                        <tr>
+                            <th class="cdx-table__table__select-rows">
+                                <div class="cdx-checkbox">
+                                    <div class="cdx-checkbox__wrapper">
+                                        <input type="checkbox" id="selectAll" class="cdx-checkbox__input" onchange="toggleAllRows(this)" aria-label="Select all rows">
+                                        <span class="cdx-checkbox__icon"></span>
+                                    </div>
+                                </div>
+                            </th>
+                            <th class="cdx-table__table__cell--align-center">
+                                SN
+                            </th>
+                            <th>
+                                Page Title
+                            </th>
+                            <th class="cdx-table__table__cell--align-center">
+                                Status
+                            </th>
+                            <th class="cdx-table__table__cell--align-center" style="width: 320px;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">1</td><td><span class="page-title-link">3D-project</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(1)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(1)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(1)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">2</td><td><span class="page-title-link">AWA Digitalise Youth Project/Muib Shefiu</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(2)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(2)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(2)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">3</td><td><span class="page-title-link">AWA Digitalise Youth Project 2025/Overview & Training schedule</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(3)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(3)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(3)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">4</td><td><span class="page-title-link">AWW On WikiSkills Mentorship Program</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(4)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(4)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(4)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">5</td><td><span class="page-title-link">Affiliations Committee/News/Issue 5/sandbox</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(5)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(5)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(5)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">6</td><td><span class="page-title-link">Africa Wiki Women (AWW) Voices Podcast</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(6)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(6)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(6)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">7</td><td><span class="page-title-link">Africa Wiki Women - Nominate Her</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(7)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(7)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(7)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">8</td><td><span class="page-title-link">African Health Initiative</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(8)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(8)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(8)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">9</td><td><span class="page-title-link">African Wiki Women Leadership and Fellowship Program Charter</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(9)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(9)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(9)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">10</td><td><span class="page-title-link">AfroCuration Ghana 2025/Header</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(10)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(10)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(10)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">11</td><td><span class="page-title-link">AvoinGLAM/Public domain in France/2025</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(11)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(11)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(11)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">12</td><td><span class="page-title-link">Bangla WikiConnect/Teams</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(12)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(12)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(12)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">13</td><td><span class="page-title-link">CA Youth Community/Communication</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(13)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(13)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(13)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">14</td><td><span class="page-title-link">CA Youth Community/Goals</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(14)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(14)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(14)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">15</td><td><span class="page-title-link">CA Youth Community/Participate</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(15)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(15)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(15)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">16</td><td><span class="page-title-link">Capacity Exchange/Links</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(16)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(16)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(16)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">17</td><td><span class="page-title-link">Central Asian WikiCon 2026</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(17)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(17)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(17)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">18</td><td><span class="page-title-link">Community Insights/Community Insights 2024 Report</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(18)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(18)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(18)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">19</td><td><span class="page-title-link">Community Wishlist Survey 2025</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(19)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(19)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(19)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">20</td><td><span class="page-title-link">ContentTranslation/About</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(20)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(20)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(20)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">21</td><td><span class="page-title-link">ContentTranslation/V2/Release plan</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(21)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(21)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(21)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">22</td><td><span class="page-title-link">Creative Commons/About</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(22)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(22)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(22)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">23</td><td><span class="page-title-link">Data and Analytics/Annual Plan/2025-2026</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(23)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(23)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(23)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">24</td><td><span class="page-title-link">Diff/Blog/2025-01</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(24)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(24)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(24)" title="Remove from Translation">Remove</button></div></td></tr>
+                        <tr><td class="cdx-table__table__select-rows"><div class="cdx-checkbox"><div class="cdx-checkbox__wrapper"><input type="checkbox" class="cdx-checkbox__input" onchange="updateSelection()" aria-label="Select row"><span class="cdx-checkbox__icon"></span></div></div></td><td class="cdx-table__table__cell--align-center">25</td><td><span class="page-title-link">Edit 2030/Recommendations</span></td><td class="cdx-table__table__cell--align-center">Proposed</td><td class="cdx-table__table__cell--align-center"><div class="table-row-actions"><button class="cdx-button cdx-button--weight-quiet cdx-button--action-progressive" onclick="markForTranslation(25)" title="Mark for Translation">Mark for translation</button><button class="cdx-button cdx-button--weight-quiet" onclick="discourage(25)" title="Discourage">Discourage</button><button class="cdx-button cdx-button--weight-quiet cdx-button--action-destructive" onclick="removeFromTranslation(25)" title="Remove from Translation">Remove</button></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="cdx-table__pagination cdx-table__pagination--bottom">
+                <div class="cdx-table-pager">
+                    <div class="cdx-table-pager__start">
+                        <select class="cdx-select" id="itemsPerPage" onchange="updatePagination()">
+                            <option value="10">10 per page</option>
+                            <option value="25" selected>25 per page</option>
+                            <option value="50">50 per page</option>
+                        </select>
+                    </div>
+                    
+                    <div class="cdx-table-pager__center">
+                        <span class="cdx-table__pagination-status--short" id="paginationShort">
+                            Page 1
+                        </span>
+                        <span class="cdx-table__pagination-status--long" id="paginationLong">
+                            Showing 1-25 of 25 items
+                        </span>
+                    </div>
+                    
+                    <div class="cdx-table-pager__end">
+                        <button class="cdx-button cdx-button--weight-quiet" id="firstBtn" onclick="goToPage('first')" disabled aria-label="Go to first page">
+                            <span class="cdx-table-pager__icon--first" aria-hidden="true"></span>
+                        </button>
+                        <button class="cdx-button cdx-button--weight-quiet" id="prevBtn" onclick="goToPage('prev')" disabled aria-label="Go to previous page">
+                            <span class="cdx-table-pager__icon--previous" aria-hidden="true"></span>
+                        </button>
+                        <button class="cdx-button cdx-button--weight-quiet" id="nextBtn" onclick="goToPage('next')" disabled aria-label="Go to next page">
+                            <span class="cdx-table-pager__icon--next" aria-hidden="true"></span>
+                        </button>
+                        <button class="cdx-button cdx-button--weight-quiet" id="lastBtn" onclick="goToPage('last')" disabled aria-label="Go to last page">
+                            <span class="cdx-table-pager__icon--last" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sortDirection = {};
+        let currentPage = 1;
+        let itemsPerPage = 25;
+        let totalItems = 25;
+        
+        function toggleAllRows(selectAllCheckbox) {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.checked = selectAllCheckbox.checked;
+            });
+            updateSelection();
+            updateRowSelections();
+        }
+        
+        function updateSelection() {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            const selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const totalCount = checkboxes.length;
+            
+            document.getElementById('selectedCount').textContent = selectedCount;
+            const bulkActionsHeader = document.getElementById('bulkActionsHeader');
+            if (selectedCount > 0) {
+                bulkActionsHeader.classList.add('cdx-table__header--visible');
+            } else {
+                bulkActionsHeader.classList.remove('cdx-table__header--visible');
+            }
+            
+            // Update select all checkbox
+            const selectAllCheckbox = document.getElementById('selectAll');
+            selectAllCheckbox.checked = selectedCount === totalCount;
+            selectAllCheckbox.indeterminate = selectedCount > 0 && selectedCount < totalCount;
+            
+            // Enable/disable bulk action buttons based on selection
+            const bulkButtons = [
+                document.getElementById('bulkMarkTranslation'),
+                document.getElementById('bulkDiscourage'),
+                document.getElementById('bulkRemove'),
+                document.getElementById('clearSelection')
+            ];
+            
+            bulkButtons.forEach(button => {
+                if (button) {
+                    button.disabled = selectedCount === 0;
+                }
+            });
+        }
+        
+        function updateRowSelections() {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            checkboxes.forEach((cb, index) => {
+                const row = cb.closest('tr');
+                if (cb.checked) {
+                    row.classList.add('cdx-table__table__row--selected');
+                } else {
+                    row.classList.remove('cdx-table__table__row--selected');
+                }
+            });
+        }
+        
+        function sortTable(columnIndex) {
+            const table = document.getElementById('translationTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            const currentDirection = sortDirection[columnIndex] || 'asc';
+            const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+            sortDirection[columnIndex] = newDirection;
+            
+            // Clear all sort indicators
+            for (let i = 0; i < 4; i++) {
+                const sortIcon = document.getElementById(`sort-${i}`);
+                sortIcon.className = 'cdx-table__table__sort-icon cdx-table__table__sort-icon--unsorted';
+            }
+            
+            // Set current sort indicator
+            const currentSortIcon = document.getElementById(`sort-${columnIndex}`);
+            currentSortIcon.className = newDirection === 'asc' 
+                ? 'cdx-table__table__sort-icon cdx-table__table__sort-icon--asc'
+                : 'cdx-table__table__sort-icon cdx-table__table__sort-icon--desc';
+            
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex + 1].textContent.trim();
+                const bValue = b.cells[columnIndex + 1].textContent.trim();
+                
+                // Handle numeric sorting for ID column
+                if (columnIndex === 0) {
+                    return newDirection === 'asc' 
+                        ? parseInt(aValue) - parseInt(bValue)
+                        : parseInt(bValue) - parseInt(aValue);
+                }
+                
+                // Handle text sorting
+                const comparison = aValue.localeCompare(bValue);
+                return newDirection === 'asc' ? comparison : -comparison;
+            });
+            
+            // Remove all rows and re-add them in sorted order
+            rows.forEach(row => tbody.removeChild(row));
+            rows.forEach(row => tbody.appendChild(row));
+        }
+        
+        // Add event listeners for row selection visual updates
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox' && e.target !== document.getElementById('selectAll')) {
+                updateRowSelections();
+            }
+        });
+        
+        function updatePagination() {
+            const newItemsPerPage = parseInt(document.getElementById('itemsPerPage').value);
+            
+            // If items per page changed, reset to page 1
+            if (newItemsPerPage !== itemsPerPage) {
+                currentPage = 1;
+            }
+            itemsPerPage = newItemsPerPage;
+            
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+            
+            // Update pagination status
+            document.getElementById('paginationShort').textContent = `Page ${currentPage}`;
+            document.getElementById('paginationLong').textContent = `Showing ${startItem}-${endItem} of ${totalItems} items`;
+            
+            // Update button states
+            const firstBtn = document.getElementById('firstBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const lastBtn = document.getElementById('lastBtn');
+            
+            const isFirstPage = currentPage === 1;
+            const isLastPage = currentPage === totalPages;
+            
+            firstBtn.disabled = isFirstPage;
+            prevBtn.disabled = isFirstPage;
+            nextBtn.disabled = isLastPage;
+            lastBtn.disabled = isLastPage;
+            
+            // Show/hide table rows based on pagination
+            updateTableRows();
+        }
+        
+        function updateTableRows() {
+            const rows = document.querySelectorAll('#translationTable tbody tr');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            
+            rows.forEach((row, index) => {
+                if (index >= startIndex && index < endIndex) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update selection count since some rows might be hidden
+            updateSelection();
+        }
+        
+        function goToPage(direction) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            switch (direction) {
+                case 'first':
+                    currentPage = 1;
+                    break;
+                case 'prev':
+                    if (currentPage > 1) currentPage--;
+                    break;
+                case 'next':
+                    if (currentPage < totalPages) currentPage++;
+                    break;
+                case 'last':
+                    currentPage = totalPages;
+                    break;
+            }
+            
+            updatePagination();
+        }
+        
+        // Admin action functions with consistent positioning
+        function updateActionButtons(rowId) {
+            const row = document.querySelector(`#translationTable tbody tr:nth-child(${rowId})`);
+            const actionCell = row.cells[4];
+            const statusCell = row.cells[3];
+            const currentStatus = statusCell.textContent;
+            
+            // Find existing buttons or create new ones
+            let actionsDiv = actionCell.querySelector('.table-row-actions');
+            if (!actionsDiv) {
+                actionsDiv = document.createElement('div');
+                actionsDiv.className = 'table-row-actions';
+                actionCell.innerHTML = '';
+                actionCell.appendChild(actionsDiv);
+            }
+            
+            // Clear existing buttons
+            actionsDiv.innerHTML = '';
+            
+            // Position 1: Mark for translation / Restore (when marked)
+            const position1Button = document.createElement('button');
+            position1Button.className = 'cdx-button cdx-button--weight-quiet';
+            
+            // Position 2: Discourage / Restore (when discouraged)  
+            const position2Button = document.createElement('button');
+            position2Button.className = 'cdx-button cdx-button--weight-quiet';
+            
+            // Position 3: Remove / Restore (when removed)
+            const position3Button = document.createElement('button');
+            position3Button.className = 'cdx-button cdx-button--weight-quiet cdx-button--action-destructive';
+            
+            // Set button content based on current status
+            if (currentStatus === 'Marked for Translation') {
+                // Position 1: Restore (since this item was marked)
+                position1Button.textContent = 'Restore';
+                position1Button.title = 'Restore to Proposed';
+                position1Button.onclick = () => restoreToProposed(rowId);
+                position1Button.className = 'cdx-button cdx-button--weight-quiet';
+                
+                // Position 2: Discourage (still available)
+                position2Button.textContent = 'Discourage';
+                position2Button.title = 'Discourage';
+                position2Button.onclick = () => discourage(rowId);
+                
+                // Position 3: Remove (still available)
+                position3Button.textContent = 'Remove';
+                position3Button.title = 'Remove from Translation';
+                position3Button.onclick = () => removeFromTranslation(rowId);
+                
+            } else if (currentStatus === 'Discouraged') {
+                // Position 1: Mark for translation (still available)
+                position1Button.textContent = 'Mark for translation';
+                position1Button.title = 'Mark for Translation';
+                position1Button.onclick = () => markForTranslation(rowId);
+                position1Button.className = 'cdx-button cdx-button--weight-quiet cdx-button--action-progressive';
+                
+                // Position 2: Restore (since this item was discouraged)
+                position2Button.textContent = 'Restore';
+                position2Button.title = 'Restore to Proposed';
+                position2Button.onclick = () => restoreToProposed(rowId);
+                
+                // Position 3: Remove (still available)
+                position3Button.textContent = 'Remove';
+                position3Button.title = 'Remove from Translation';
+                position3Button.onclick = () => removeFromTranslation(rowId);
+                
+            } else if (currentStatus === 'Removed') {
+                // Position 1: Mark for translation (still available)
+                position1Button.textContent = 'Mark for translation';
+                position1Button.title = 'Mark for Translation';
+                position1Button.onclick = () => markForTranslation(rowId);
+                position1Button.className = 'cdx-button cdx-button--weight-quiet cdx-button--action-progressive';
+                
+                // Position 2: Discourage (still available)
+                position2Button.textContent = 'Discourage';
+                position2Button.title = 'Discourage';
+                position2Button.onclick = () => discourage(rowId);
+                
+                // Position 3: Restore (since this item was removed)
+                position3Button.textContent = 'Restore';
+                position3Button.title = 'Restore to Proposed';
+                position3Button.onclick = () => restoreToProposed(rowId);
+                position3Button.className = 'cdx-button cdx-button--weight-quiet';
+                
+            } else {
+                // Default "Proposed" state
+                // Position 1: Mark for translation
+                position1Button.textContent = 'Mark for translation';
+                position1Button.title = 'Mark for Translation';
+                position1Button.onclick = () => markForTranslation(rowId);
+                position1Button.className = 'cdx-button cdx-button--weight-quiet cdx-button--action-progressive';
+                
+                // Position 2: Discourage
+                position2Button.textContent = 'Discourage';
+                position2Button.title = 'Discourage';
+                position2Button.onclick = () => discourage(rowId);
+                
+                // Position 3: Remove
+                position3Button.textContent = 'Remove';
+                position3Button.title = 'Remove from Translation';
+                position3Button.onclick = () => removeFromTranslation(rowId);
+            }
+            
+            // Always add all three buttons to maintain consistent positioning
+            actionsDiv.appendChild(position1Button);
+            actionsDiv.appendChild(position2Button);
+            actionsDiv.appendChild(position3Button);
+        }
+        
+        function markForTranslation(rowId) {
+            const row = document.querySelector(`#translationTable tbody tr:nth-child(${rowId})`);
+            const statusCell = row.cells[3];
+            statusCell.textContent = 'Marked for Translation';
+            statusCell.style.color = 'var(--border-color-success, #099979)';
+            
+            updateActionButtons(rowId);
+            console.log(`Row ${rowId}: Marked for translation`);
+        }
+        
+        function discourage(rowId) {
+            const row = document.querySelector(`#translationTable tbody tr:nth-child(${rowId})`);
+            const statusCell = row.cells[3];
+            statusCell.textContent = 'Discouraged';
+            statusCell.style.color = 'var(--border-color-warning, #ab7f2a)';
+            
+            updateActionButtons(rowId);
+            console.log(`Row ${rowId}: Discouraged`);
+        }
+        
+        function removeFromTranslation(rowId) {
+            const row = document.querySelector(`#translationTable tbody tr:nth-child(${rowId})`);
+            const statusCell = row.cells[3];
+            statusCell.textContent = 'Removed';
+            statusCell.style.color = 'var(--color-destructive, #d73333)';
+            
+            updateActionButtons(rowId);
+            console.log(`Row ${rowId}: Removed from translation`);
+        }
+        
+        function restoreToProposed(rowId) {
+            const row = document.querySelector(`#translationTable tbody tr:nth-child(${rowId})`);
+            const statusCell = row.cells[3];
+            statusCell.textContent = 'Proposed';
+            statusCell.style.color = '';
+            
+            updateActionButtons(rowId);
+            console.log(`Row ${rowId}: Restored to proposed`);
+        }
+        
+        // Bulk action functions
+        function getSelectedRows() {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]:checked');
+            return Array.from(checkboxes).map(cb => {
+                const row = cb.closest('tr');
+                const rowIndex = Array.from(row.parentNode.children).indexOf(row) + 1;
+                return { checkbox: cb, row: row, rowIndex: rowIndex };
+            });
+        }
+        
+        function bulkMarkForTranslation() {
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Mark ${selectedRows.length} selected pages for translation?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                markForTranslation(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Marked ${selectedRows.length} pages for translation`);
+        }
+        
+        function bulkDiscourage() {
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Discourage ${selectedRows.length} selected pages?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                discourage(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Discouraged ${selectedRows.length} pages`);
+        }
+        
+        function bulkRemoveFromTranslation() {
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Remove ${selectedRows.length} selected pages from translation?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                removeFromTranslation(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Removed ${selectedRows.length} pages from translation`);
+        }
+        
+        function clearSelection() {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.checked = false;
+            });
+            
+            const selectAllCheckbox = document.getElementById('selectAll');
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+            
+            updateSelection();
+            updateRowSelections();
+            console.log('Selection cleared');
+        }
+        
+        // Initialize
+        updateSelection();
+        updatePagination();
+    </script>
+</body>
+</html>
