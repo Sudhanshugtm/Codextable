@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Table Treatments Showcase</title>
+    <!-- Import Codex CSS -->
+    <link rel="stylesheet" href="./shared/node_modules/@wikimedia/codex/dist/codex.style.css">
+    <!-- Import Codex Button CSS -->
+    <link rel="stylesheet" href="./shared/node_modules/@wikimedia/codex/dist/modules/CdxButton.css">
+    <!-- Import Codex Icon CSS -->
+    <link rel="stylesheet" href="./shared/node_modules/@wikimedia/codex/dist/modules/Icon.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+        .page-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        .page-title {
+            color: #202122;
+            margin: 0 0 1rem 0;
+            font-size: 2.25rem;
+            font-weight: normal;
+            line-height: 1.25;
+            border-bottom: 1px solid #a2a9b1;
+            padding-bottom: 0.5rem;
+            font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+        }
+        .page-subtitle {
+            color: #54595d;
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+        }
+        .treatments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .treatment-card {
+            border: 1px solid #a2a9b1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            transition: box-shadow 0.2s ease;
+        }
+        .treatment-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .treatment-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #202122;
+            margin-bottom: 0.75rem;
+        }
+        .treatment-description {
+            color: #54595d;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .treatment-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+        }
+        .treatment-features li {
+            color: #54595d;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+        .treatment-features li:before {
+            content: "•";
+            color: #36c;
+            position: absolute;
+            left: 0;
+        }
+        .cdx-icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        .cdx-icon--arrow {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='m17.5 4.75-7.5 7.5-7.5-7.5L1 6.25l9 9 9-9z'/></svg>");
+            transform: rotate(-90deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <h1 class="page-title">Codex Table Treatments Showcase</h1>
+        <p class="page-subtitle">Explore different implementations and treatments of Wikimedia Codex table components for various use cases.</p>
+        
+        <div class="treatments-grid">
+            <div class="treatment-card">
+                <h2 class="treatment-title">Treatment 1: Bulk Actions Table</h2>
+                <p class="treatment-description">
+                    A comprehensive table implementation featuring bulk selection, contextual header actions, 
+                    row-level admin controls, and authentic Codex styling.
+                </p>
+                <ul class="treatment-features">
+                    <li>Bulk selection with contextual header</li>
+                    <li>Row-level admin actions (mark, discourage, remove)</li>
+                    <li>Codex checkboxes and icons</li>
+                    <li>Progressive color links</li>
+                    <li>Bottom pagination</li>
+                    <li>MediaWiki-style heading</li>
+                </ul>
+                <a href="./treatment-1/" class="cdx-button cdx-button--action-progressive">
+                    <span class="cdx-icon cdx-icon--arrow"></span>
+                    View Treatment 1
+                </a>
+            </div>
+            
+            <div class="treatment-card">
+                <h2 class="treatment-title">Treatment 2: Coming Soon</h2>
+                <p class="treatment-description">
+                    Additional table treatments will be added here to demonstrate different use cases 
+                    and design patterns with the Codex design system.
+                </p>
+                <ul class="treatment-features">
+                    <li>Sortable columns</li>
+                    <li>Advanced filtering</li>
+                    <li>Expandable rows</li>
+                    <li>Custom cell renderers</li>
+                </ul>
+                <button class="cdx-button cdx-button--weight-quiet" disabled>
+                    Coming Soon
+                </button>
+            </div>
+            
+            <div class="treatment-card">
+                <h2 class="treatment-title">Treatment 3: Coming Soon</h2>
+                <p class="treatment-description">
+                    More table variations showcasing different interaction patterns and 
+                    visual treatments within the Codex framework.
+                </p>
+                <ul class="treatment-features">
+                    <li>Inline editing</li>
+                    <li>Drag and drop reordering</li>
+                    <li>Nested data structures</li>
+                    <li>Custom status indicators</li>
+                </ul>
+                <button class="cdx-button cdx-button--weight-quiet" disabled>
+                    Coming Soon
+                </button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #a2a9b1; color: #54595d; font-size: 0.9rem;">
+            <p><strong>About this showcase:</strong> This collection demonstrates various implementations of Wikimedia Codex table components, 
+            showcasing different interaction patterns, styling approaches, and use cases. Each treatment maintains strict adherence 
+            to the Codex design system while exploring different functional requirements.</p>
+            
+            <p><strong>Codex Design System:</strong> <a href="https://doc.wikimedia.org/codex/latest/" style="color: #36c;">Official Documentation</a> | 
+            <a href="https://github.com/wikimedia/codex" style="color: #36c;">GitHub Repository</a></p>
+        </div>
+    </div>
+</body>
+</html>
