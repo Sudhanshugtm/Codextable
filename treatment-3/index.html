@@ -62,41 +62,41 @@
             text-decoration: underline;
         }
         /* Codex table header styles */
-        .cdx-table__header {
+        .cdx-docs-table-with-selection__header {
             display: none;
             background: #eaf3ff;
             border-bottom: 1px solid #a2a9b1;
             padding: 16px 20px;
         }
-        .cdx-table__header.cdx-table__header--visible {
+        .cdx-docs-table-with-selection__header.cdx-docs-table-with-selection__header--visible {
             display: block;
         }
-        .cdx-table__header__content {
+        .cdx-docs-table-with-selection__header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 16px;
         }
-        .cdx-table__header__caption {
+        .cdx-docs-table-with-selection__header-content__caption {
             flex: 0 0 auto;
             font-weight: 500;
             color: #202122;
             font-size: 14px;
         }
-        .cdx-table__header__actions {
+        .cdx-docs-table-with-selection__header-content__buttons {
             display: flex;
             gap: 8px;
             align-items: center;
             flex-wrap: wrap;
         }
-        .cdx-table__header__actions .cdx-button {
+        .cdx-docs-table-with-selection__header-content__buttons .cdx-button {
             min-height: 32px;
             font-size: 0.875rem;
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        .cdx-table__header__actions .cdx-button:disabled {
+        .cdx-docs-table-with-selection__header-content__buttons .cdx-button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -203,12 +203,12 @@
         
         <div style="padding: 2rem;">
             <div class="cdx-table">
-                <div class="cdx-table__header" id="bulkActionsHeader">
-                    <div class="cdx-table__header__content">
-                        <div class="cdx-table__header__caption">
+                <div class="cdx-docs-table-with-selection__header" id="bulkActionsHeader">
+                    <div class="cdx-docs-table-with-selection__header-content">
+                        <div class="cdx-docs-table-with-selection__header-content__caption">
                             <strong><span id="selectedCount">0</span> pages selected</strong>
                         </div>
-                        <div class="cdx-table__header__actions">
+                        <div class="cdx-docs-table-with-selection__header-content__buttons">
                             <button class="cdx-button" 
                                     id="bulkMarkTranslation" onclick="bulkMarkForTranslation()" 
                                     title="Mark selected pages for translation">
@@ -305,9 +305,9 @@
             
             const bulkActionsHeader = document.getElementById('bulkActionsHeader');
             if (selectedCount > 0) {
-                bulkActionsHeader.classList.add('cdx-table__header--visible');
+                bulkActionsHeader.classList.add('cdx-docs-table-with-selection__header--visible');
             } else {
-                bulkActionsHeader.classList.remove('cdx-table__header--visible');
+                bulkActionsHeader.classList.remove('cdx-docs-table-with-selection__header--visible');
             }
         }
 
