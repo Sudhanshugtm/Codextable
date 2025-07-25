@@ -57,14 +57,14 @@
         .back-link:hover {
             text-decoration: underline;
         }
-        /* Codex table header styles */
-        .cdx-docs-table-with-selection__header {
+        /* Codex table header styles - matching documentation */
+        .cdx-table__header {
             display: none;
             background: #eaf3ff;
             border-bottom: 1px solid #a2a9b1;
             padding: 16px 20px;
         }
-        .cdx-docs-table-with-selection__header.cdx-docs-table-with-selection__header--visible {
+        .cdx-table__header--visible {
             display: block;
         }
         .cdx-docs-table-with-selection__header-content {
@@ -73,32 +73,13 @@
             align-items: center;
             gap: 16px;
         }
-        .cdx-docs-table-with-selection__header-content__caption {
-            flex: 0 0 auto;
-            font-weight: 500;
-            color: #202122;
-            font-size: 14px;
-        }
         .cdx-docs-table-with-selection__header-content__buttons {
             display: flex;
             gap: 8px;
             align-items: center;
-            flex-wrap: wrap;
         }
         .cdx-docs-table-with-selection__header-content__buttons .cdx-button {
-            min-height: 32px;
             font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .cdx-docs-table-with-selection__header-content__buttons .cdx-button .cdx-icon {
-            width: 16px;
-            height: 16px;
-        }
-        .cdx-docs-table-with-selection__header-content__buttons .cdx-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
         .page-title-link {
             color: var(--color-progressive, #36c);
@@ -159,12 +140,12 @@
         </div>
         
         <div class="cdx-table">
-            <div class="cdx-docs-table-with-selection__header" id="bulkActionsHeader">
+            <div class="cdx-table__header" id="bulkActionsHeader">
                 <div class="cdx-docs-table-with-selection__header-content">
-                    <div class="cdx-docs-table-with-selection__header-content__caption">
+                    <span>
                         <strong><span id="selectedCount">0</span> pages selected</strong>
-                    </div>
-                    <div class="cdx-docs-table-with-selection__header-content__buttons">
+                    </span>
+                    <span class="cdx-docs-table-with-selection__header-content__buttons">
                         <button class="cdx-button" 
                                 id="bulkMarkTranslation" onclick="bulkMarkForTranslation()" 
                                 title="Mark selected pages for translation">
@@ -185,7 +166,7 @@
                                 title="Clear selection">
                             Clear selection
                         </button>
-                    </div>
+                    </span>
                 </div>
             </div>
             <div class="cdx-table__table-wrapper">
@@ -306,9 +287,9 @@
             document.getElementById('selectedCount').textContent = selectedCount;
             const bulkActionsHeader = document.getElementById('bulkActionsHeader');
             if (selectedCount > 0) {
-                bulkActionsHeader.classList.add('cdx-docs-table-with-selection__header--visible');
+                bulkActionsHeader.classList.add('cdx-table__header--visible');
             } else {
-                bulkActionsHeader.classList.remove('cdx-docs-table-with-selection__header--visible');
+                bulkActionsHeader.classList.remove('cdx-table__header--visible');
             }
             
             // Update select all checkbox
