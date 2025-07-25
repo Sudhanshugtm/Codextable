@@ -141,6 +141,11 @@
                             Remove from translation
                         </button>
                         <button class="cdx-button" 
+                                id="bulkRestore" onclick="bulkRestoreToProposed()" 
+                                title="Restore selected pages to proposed status">
+                            Restore to proposed
+                        </button>
+                        <button class="cdx-button" 
                                 id="clearSelection" onclick="clearSelection()" 
                                 title="Clear selection">
                             Clear selection
@@ -281,6 +286,7 @@
                 document.getElementById('bulkMarkTranslation'),
                 document.getElementById('bulkDiscourage'),
                 document.getElementById('bulkRemove'),
+                document.getElementById('bulkRestore'),
                 document.getElementById('clearSelection')
             ];
             
@@ -594,6 +600,26 @@
             
             clearSelection();
             console.log(`Bulk action: Removed ${selectedRows.length} pages from translation`);
+        }
+        
+        function bulkRestoreToProposed() {
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Restore ${selectedRows.length} selected pages to proposed status?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                restoreToProposed(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Restored ${selectedRows.length} pages to proposed`);
         }
         
         function clearSelection() {

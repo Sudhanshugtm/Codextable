@@ -210,6 +210,11 @@
                                 Remove from translation
                             </button>
                             <button class="cdx-button" 
+                                    id="bulkRestore" onclick="bulkRestoreToProposed()" 
+                                    title="Restore selected pages to proposed status">
+                                Restore to proposed
+                            </button>
+                            <button class="cdx-button" 
                                     id="clearSelection" onclick="clearSelection()" 
                                     title="Clear selection">
                                 Clear selection
@@ -466,16 +471,93 @@
             console.log(`Row ${rowId}: Restored to proposed`);
         }
 
+        function getSelectedRows() {
+            const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]:checked');
+            return Array.from(checkboxes).map(cb => {
+                const row = cb.closest('tr');
+                const rowIndex = Array.from(row.parentNode.children).indexOf(row) + 1;
+                return { checkbox: cb, row: row, rowIndex: rowIndex };
+            });
+        }
+
         function bulkMarkForTranslation() {
-            console.log('Bulk action: Mark for translation');
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Mark ${selectedRows.length} selected pages for translation?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                markForTranslation(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Marked ${selectedRows.length} pages for translation`);
         }
 
         function bulkDiscourage() {
-            console.log('Bulk action: Discourage');
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Discourage ${selectedRows.length} selected pages?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                discourage(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Discouraged ${selectedRows.length} pages`);
         }
 
         function bulkRemoveFromTranslation() {
-            console.log('Bulk action: Remove from translation');
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Remove ${selectedRows.length} selected pages from translation?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                removeFromTranslation(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Removed ${selectedRows.length} pages from translation`);
+        }
+
+        function bulkRestoreToProposed() {
+            const selectedRows = getSelectedRows();
+            
+            if (selectedRows.length === 0) {
+                alert('No pages selected');
+                return;
+            }
+            
+            if (!confirm(`Restore ${selectedRows.length} selected pages to proposed status?`)) {
+                return;
+            }
+            
+            selectedRows.forEach(({ row, rowIndex }) => {
+                restoreToProposed(rowIndex);
+            });
+            
+            clearSelection();
+            console.log(`Bulk action: Restored ${selectedRows.length} pages to proposed`);
         }
 
         function clearSelection() {
