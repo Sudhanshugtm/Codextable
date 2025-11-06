@@ -60,6 +60,7 @@
         /* Filter bar styling */
         .filter-bar {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
             padding: 16px 20px;
             border-bottom: 1px solid #a2a9b1;
@@ -154,14 +155,17 @@
         }
         .filter-dialog__footer {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             padding: 16px 24px;
             border-top: 1px solid #a2a9b1;
             background: #f8f9fa;
+            gap: 12px;
         }
         .filter-dialog__footer-actions {
             display: flex;
+            flex-wrap: wrap;
             gap: 12px;
         }
         .filter-badge {
@@ -173,6 +177,10 @@
             padding: 4px 12px;
             font-size: 13px;
             gap: 8px;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .filter-badge__clear {
             background: none;
@@ -182,6 +190,7 @@
             display: flex;
             align-items: center;
             color: #54595d;
+            flex-shrink: 0;
         }
         .filter-badge__clear:hover {
             color: #202122;
@@ -198,17 +207,20 @@
         }
         .cdx-docs-table-with-selection__header-content {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 16px;
         }
         .cdx-docs-table-with-selection__header-content__buttons {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
             align-items: center;
         }
         .cdx-docs-table-with-selection__header-content__buttons .cdx-button {
             font-size: 0.875rem;
+            white-space: nowrap;
         }
         .page-title-link {
             color: var(--color-progressive, #36c);
