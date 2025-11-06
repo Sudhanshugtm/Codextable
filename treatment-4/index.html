@@ -60,7 +60,8 @@
         /* Filter bar styling */
         .filter-bar {
             display: flex;
-            gap: 8px;
+            flex-wrap: wrap;
+            gap: 12px;
             padding: 16px 20px;
             border-bottom: 1px solid #a2a9b1;
             background: #f8f9fa;
@@ -69,7 +70,7 @@
         .filter-bar__label {
             font-weight: 600;
             color: #202122;
-            margin-right: 8px;
+            flex-shrink: 0;
         }
         /* Filter button with dropdown */
         .filter-wrapper {
@@ -130,6 +131,10 @@
             padding: 4px 12px;
             font-size: 13px;
             gap: 8px;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .filter-badge__clear {
             background: none;
@@ -139,6 +144,7 @@
             display: flex;
             align-items: center;
             color: #54595d;
+            flex-shrink: 0;
         }
         .filter-badge__clear:hover {
             color: #202122;
@@ -155,17 +161,20 @@
         }
         .cdx-docs-table-with-selection__header-content {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 16px;
         }
         .cdx-docs-table-with-selection__header-content__buttons {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
             align-items: center;
         }
         .cdx-docs-table-with-selection__header-content__buttons .cdx-button {
             font-size: 0.875rem;
+            white-space: nowrap;
         }
         .page-title-link {
             color: var(--color-progressive, #36c);
@@ -186,8 +195,11 @@
             height: 20px;
             display: inline-block;
         }
-        .cdx-icon--funnel {
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M12 13v6l-4-2V13L0 1h20z'/></svg>");
+        .cdx-icon--list-bullet {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><circle cx='3' cy='5' r='2'/><circle cx='3' cy='10' r='2'/><circle cx='3' cy='15' r='2'/><rect x='7' y='4' width='11' height='2' rx='1'/><rect x='7' y='9' width='11' height='2' rx='1'/><rect x='7' y='14' width='11' height='2' rx='1'/></svg>");
+        }
+        .cdx-icon--search {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M12.2 13.6a7 7 0 1 1 1.4-1.4l5.4 5.4-1.4 1.4-5.4-5.4zM3 8a5 5 0 1 0 10 0A5 5 0 0 0 3 8z'/></svg>");
         }
         .cdx-icon--close {
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><path d='M4.34 2.93l12.73 12.73-1.41 1.41L2.93 4.35z'/><path d='M17.07 4.34L4.34 17.07l-1.41-1.41L15.66 2.93z'/></svg>");
@@ -225,7 +237,7 @@
                 <!-- Status Filter -->
                 <div class="filter-wrapper">
                     <button class="cdx-button cdx-button--weight-quiet" id="statusFilterBtn" onclick="toggleFilterPopover('status')">
-                        <span class="cdx-icon cdx-icon--funnel"></span>
+                        <span class="cdx-icon cdx-icon--list-bullet"></span>
                         Status
                     </button>
                     <div class="filter-popover" id="statusFilterPopover">
@@ -270,7 +282,7 @@
                 <!-- Search Filter -->
                 <div class="filter-wrapper">
                     <button class="cdx-button cdx-button--weight-quiet" id="searchFilterBtn" onclick="toggleFilterPopover('search')">
-                        <span class="cdx-icon cdx-icon--funnel"></span>
+                        <span class="cdx-icon cdx-icon--search"></span>
                         Search
                     </button>
                     <div class="filter-popover" id="searchFilterPopover">
